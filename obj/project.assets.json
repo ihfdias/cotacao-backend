@@ -2,9 +2,6 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "Microsoft.AspNetCore.OpenApi/7.0.0": {
-        "type": "package"
-      },
       "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
         "type": "package",
         "build": {
@@ -95,21 +92,6 @@
     }
   },
   "libraries": {
-    "Microsoft.AspNetCore.OpenApi/7.0.0": {
-      "sha512": "P1mkNhZ3IwU3phNLIUkgqVXb1exnooTalIYwpSON3oKKkcRtACDgS4WpO+xnwFw4KzV0bmgkUqB3acXxIefvvg==",
-      "type": "package",
-      "path": "microsoft.aspnetcore.openapi/7.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "THIRD-PARTY-NOTICES.TXT",
-        "lib/net7.0/Microsoft.AspNetCore.OpenApi.dll",
-        "lib/net7.0/Microsoft.AspNetCore.OpenApi.xml",
-        "microsoft.aspnetcore.openapi.7.0.0.nupkg.sha512",
-        "microsoft.aspnetcore.openapi.nuspec"
-      ]
-    },
     "Microsoft.Extensions.ApiDescription.Server/6.0.5": {
       "sha512": "Ckb5EDBUNJdFWyajfXzUIMRkhf52fHZOQuuZg/oiu8y7zDCVwD0iHhew6MnThjHmevanpxL3f5ci2TtHQEN6bw==",
       "type": "package",
@@ -451,7 +433,6 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Microsoft.AspNetCore.OpenApi >= 6.0.25",
       "Swashbuckle.AspNetCore >= 6.5.0"
     ]
   },
@@ -498,10 +479,6 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
-          "Microsoft.AspNetCore.OpenApi": {
-            "target": "Package",
-            "version": "[6.0.25, )"
-          },
           "Swashbuckle.AspNetCore": {
             "target": "Package",
             "version": "[6.5.0, )"
@@ -547,26 +524,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304\\RuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1603",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "ApiDefinitiva depende de Microsoft.AspNetCore.OpenApi (>= 6.0.25) mas Microsoft.AspNetCore.OpenApi 6.0.25 não foi encontrado. Microsoft.AspNetCore.OpenApi 7.0.0 foi resolvido.",
-      "libraryId": "Microsoft.AspNetCore.OpenApi",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    },
-    {
-      "code": "NU1202",
-      "level": "Error",
-      "message": "O pacote Microsoft.AspNetCore.OpenApi 7.0.0 não é compatível com net6.0 (.NETCoreApp,Version=v6.0). O pacote Microsoft.AspNetCore.OpenApi 7.0.0 dá suporte a: net7.0 (.NETCoreApp,Version=v7.0)",
-      "libraryId": "Microsoft.AspNetCore.OpenApi",
-      "targetGraphs": [
-        "net6.0"
-      ]
-    }
-  ]
+  }
 }
