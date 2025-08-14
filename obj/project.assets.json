@@ -483,11 +483,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\cotacao-api\\ApiDefinitiva\\ApiDefinitiva.csproj",
+      "projectUniqueName": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
       "projectName": "ApiDefinitiva",
-      "projectPath": "C:\\cotacao-api\\ApiDefinitiva\\ApiDefinitiva.csproj",
+      "projectPath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
       "packagesPath": "C:\\Users\\User\\.nuget\\packages\\",
-      "outputPath": "C:\\cotacao-api\\ApiDefinitiva\\obj\\",
+      "outputPath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\User\\AppData\\Roaming\\NuGet\\NuGet.Config"
