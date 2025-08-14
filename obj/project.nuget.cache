@@ -1,16 +1,27 @@
 {
   "version": 2,
-  "dgSpecHash": "5zrdPt0LEWk=",
-  "success": true,
+  "dgSpecHash": "sko6spoO2hc=",
+  "success": false,
   "projectFilePath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.8\\microsoft.aspnetcore.openapi.9.0.8.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\microsoft.extensions.apidescription.server\\9.0.0\\microsoft.extensions.apidescription.server.9.0.0.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\microsoft.openapi\\1.6.23\\microsoft.openapi.1.6.23.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore\\9.0.3\\swashbuckle.aspnetcore.9.0.3.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\9.0.3\\swashbuckle.aspnetcore.swagger.9.0.3.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\9.0.3\\swashbuckle.aspnetcore.swaggergen.9.0.3.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\9.0.3\\swashbuckle.aspnetcore.swaggerui.9.0.3.nupkg.sha512"
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.36\\microsoft.netcore.app.ref.6.0.36.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.36\\microsoft.windowsdesktop.app.ref.6.0.36.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.36\\microsoft.aspnetcore.app.ref.6.0.36.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.36\\microsoft.netcore.app.host.win-x64.6.0.36.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1202",
+      "level": "Error",
+      "message": "O pacote Microsoft.AspNetCore.OpenApi 9.0.8 não é compatível com net6.0 (.NETCoreApp,Version=v6.0). O pacote Microsoft.AspNetCore.OpenApi 9.0.8 dá suporte a: net9.0 (.NETCoreApp,Version=v9.0)",
+      "projectPath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
+      "filePath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
+      "libraryId": "Microsoft.AspNetCore.OpenApi",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }
