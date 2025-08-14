@@ -1,11 +1,16 @@
 {
   "version": 2,
-  "dgSpecHash": "sko6spoO2hc=",
+  "dgSpecHash": "47jSDkKDPEU=",
   "success": false,
   "projectFilePath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.8\\microsoft.aspnetcore.openapi.9.0.8.nupkg.sha512",
-    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore\\9.0.3\\swashbuckle.aspnetcore.9.0.3.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.openapi\\7.0.0\\microsoft.aspnetcore.openapi.7.0.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\microsoft.openapi\\1.2.3\\microsoft.openapi.1.2.3.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
+    "C:\\Users\\User\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.5.0\\swashbuckle.aspnetcore.swaggerui.6.5.0.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.36\\microsoft.netcore.app.ref.6.0.36.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.36\\microsoft.windowsdesktop.app.ref.6.0.36.nupkg.sha512",
     "C:\\Users\\User\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.36\\microsoft.aspnetcore.app.ref.6.0.36.nupkg.sha512",
@@ -13,9 +18,21 @@
   ],
   "logs": [
     {
+      "code": "NU1603",
+      "level": "Warning",
+      "message": "ApiDefinitiva depende de Microsoft.AspNetCore.OpenApi (>= 6.0.25) mas Microsoft.AspNetCore.OpenApi 6.0.25 não foi encontrado. Microsoft.AspNetCore.OpenApi 7.0.0 foi resolvido.",
+      "projectPath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
+      "warningLevel": 1,
+      "filePath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
+      "libraryId": "Microsoft.AspNetCore.OpenApi",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    },
+    {
       "code": "NU1202",
       "level": "Error",
-      "message": "O pacote Microsoft.AspNetCore.OpenApi 9.0.8 não é compatível com net6.0 (.NETCoreApp,Version=v6.0). O pacote Microsoft.AspNetCore.OpenApi 9.0.8 dá suporte a: net9.0 (.NETCoreApp,Version=v9.0)",
+      "message": "O pacote Microsoft.AspNetCore.OpenApi 7.0.0 não é compatível com net6.0 (.NETCoreApp,Version=v6.0). O pacote Microsoft.AspNetCore.OpenApi 7.0.0 dá suporte a: net7.0 (.NETCoreApp,Version=v7.0)",
       "projectPath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
       "filePath": "C:\\cotacao-api\\ApiDefinitiva\\cotacao-backend\\ApiDefinitiva.csproj",
       "libraryId": "Microsoft.AspNetCore.OpenApi",
