@@ -1,32 +1,37 @@
 var builder = WebApplication.CreateBuilder(args);
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+
 builder.Services.AddEndpointsApiExplorer();
 
-builder.Services.AddSwaggerGen(options =>
+builder.Services.AddAuthentication(options =>
 {
-    options.AddSecurityDefinition("baseToken", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-    {
-        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Name = "baseToken",
-        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
-        Description = "Token de autorização para acessar a API."
-    });
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
 
-    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+.AddJwtBearer(options =>
+{
+    options.TokenValidationParameters = new TokenValidationParameters
     {
-        {
-            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
-            {
-                Reference = new Microsoft.OpenApi.Models.OpenApiReference
-                {
-                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
-                    Id = "baseToken"
-                }
-            },
-            new string[] {}
-        }
-    });
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
+
+        
+        ValidateIssuer = true,
+        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+
+        
+        ValidateAudience = true,
+        ValidAudience = builder.Configuration["Jwt:Audience"],
+        
+        ValidateLifetime = false 
+    };
 });
+
+builder.Services.AddAuthorization();
 
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
@@ -45,8 +50,10 @@ builder.Services.AddCors(options =>
 
 
 var app = builder.Build();
-app.UseCors(MyAllowSpecificOrigins);
 
+app.UseAuthentication();
+app.UseAuthorization();
+app.UseCors(MyAllowSpecificOrigins);
 app.UseSwagger();
 app.UseSwaggerUI();
 
