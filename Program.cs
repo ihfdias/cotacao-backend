@@ -95,11 +95,10 @@ app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {
     }
 
     var dataDeHoje = DateTime.Now.ToString("MM-dd-yyyy");
-    // URL correta do Banco Central
+   
     var url = $"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='{dataDeHoje}'&$format=json";
     var respostaDoBancoCentral = await client.GetStringAsync(url);
-
-    // Define que o cache expira em 1 hora
+    
     var opcoesDeCache = new MemoryCacheEntryOptions()
         .SetAbsoluteExpiration(TimeSpan.FromHours(1));
 
@@ -109,28 +108,6 @@ app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {
 
 }).RequireAuthorization();
 
-app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {     
-    
-    var cacheKey = $"cotacao_{DateTime.Now.ToString("yyyy-MM-dd")}";
-   
-    if (cache.TryGetValue(cacheKey, out string cotacaoEmCache))
-    {
-        
-        return Results.Content(cotacaoEmCache, "application/json");
-    }
-
-    var dataDeHoje = DateTime.Now.ToString("MM-dd-yyyy");
-    var url = $"https://...";
-    var respostaDoBancoCentral = await client.GetStringAsync(url);
-
-    var opcoesDeCache = new MemoryCacheEntryOptions()
-        .SetAbsoluteExpiration(TimeSpan.FromHours(1));
-
-    cache.Set(cacheKey, respostaDoBancoCentral, opcoesDeCache);
-    
-    return Results.Content(respostaDoBancoCentral, "application/json");
-
-}).RequireAuthorization();
 
 app.Run();
 public record UserLogin(string username, string password);
