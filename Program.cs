@@ -85,13 +85,13 @@ app.UseAuthorization();
 
 app.MapPost("/login", (UserLogin userLogin, IConfiguration config) =>
 {
-    if (userLogin.Username == "admin" && userLogin.Password == "12345")
+    if (userLogin.username == "admin" && userLogin.password == "12345")
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var issuer = config["Jwt:Issuer"];
         var audience = config["Jwt:Audience"];
-        var claims = new[] { new Claim("username", userLogin.Username) };
+        var claims = new[] { new Claim("username", userLogin.username) };
         
         var token = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(
             issuer: issuer,
@@ -116,4 +116,4 @@ app.MapGet("/", async (HttpClient client) => {
 }).RequireAuthorization();
 
 app.Run();
-public record UserLogin(string Username, string Password);
+public record UserLogin(string username, string password);
