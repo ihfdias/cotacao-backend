@@ -6,10 +6,10 @@ using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// --- Adiciona Serviços ao Contêiner ---
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
-
 
 builder.Services.AddSwaggerGen(options =>
 {
@@ -37,7 +37,6 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -49,15 +48,12 @@ builder.Services.AddAuthentication(options =>
     {
         ValidateIssuerSigningKey = true,
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"])),
-
         ValidateIssuer = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
-
         ValidateAudience = true,
         ValidAudience = builder.Configuration["Jwt:Audience"],
-
         ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero 
+        ClockSkew = TimeSpan.Zero
     };
 });
 
@@ -69,21 +65,47 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://cotacao-frontend.vercel.app", "http://localhost:5173") 
+                          policy.WithOrigins("https://cotacao-frontend.vercel.app", "http://localhost:5173")
                                 .AllowAnyHeader()
                                 .AllowAnyMethod();
                       });
 });
 
+// --- Constrói a Aplicação ---
 var app = builder.Build();
 
+// --- Configura o Pipeline de Requisições ---
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors(MyAllowSpecificOrigins);
-
 app.UseAuthentication();
 app.UseAuthorization();
 
+// --- Mapeia os Endpoints ---
+app.MapPost("/login", (UserLogin userLogin, IConfiguration config) =>
+{
+    if (userLogin.username == "admin" && userLogin.password == "12345")
+    {
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+        var issuer = config["Jwt:Issuer"];
+        var audience = config["Jwt:Audience"];
+        var claims = new[] { new Claim("username", userLogin.username) };
+        
+        var token = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(
+            issuer: issuer,
+            audience: audience,
+            claims: claims,
+            expires: DateTime.Now.AddMinutes(120),
+            signingCredentials: credentials);
+
+        var tokenHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+        var stringToken = tokenHandler.WriteToken(token);
+
+        return Results.Ok(new { token = stringToken });
+    }
+    return Results.Unauthorized();
+});
 
 app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {
     
@@ -95,7 +117,6 @@ app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {
     }
 
     var dataDeHoje = DateTime.Now.ToString("MM-dd-yyyy");
-   
     var url = $"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='{dataDeHoje}'&$format=json";
     var respostaDoBancoCentral = await client.GetStringAsync(url);
     
@@ -108,6 +129,8 @@ app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {
 
 }).RequireAuthorization();
 
-
+// --- Inicia a Aplicação ---
 app.Run();
+
+// --- Declaração de Tipos ---
 public record UserLogin(string username, string password);
