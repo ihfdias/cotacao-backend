@@ -47,6 +47,25 @@ A principal função desta API é consultar os dados de **cotação do Dólar em
 
 ### ⚡ Instalação e Execução
 
-1. **Clone o repositório**  
+1. **Navegue até a pasta do projeto**  
+   Carregue a solução (`.sln`) no **VS Code**.
+
+2. **Configure os Segredos**
    ```bash
-   git clone https://github.com/ihfdias/cotacao-backend.git
+   dotnet user-secrets init
+   dotnet user-secrets set "Jwt:Key" "SUA_CHAVE_SECRETA"
+
+Substitua SUA_CHAVE_SECRETA por uma chave forte e aleatória.
+
+Execute a aplicação
+
+dotnet run
+
+
+A API estará rodando no endereço informado no terminal (ex:
+👉 http://localhost:5053)
+
+📖 Documentação Swagger
+
+Após rodar a aplicação, acesse:
+👉 http://localhost:5053/swagger
