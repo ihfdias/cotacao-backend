@@ -15,7 +15,7 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
     {
         In = Microsoft.OpenApi.Models.ParameterLocation.Header,
-        Description = "Por favor, insira 'Bearer ' (com espaço) seguido do seu token JWT",
+        Description = "Please enter 'Bearer ' followed by your JWT",
         Name = "Authorization",
         Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
         Scheme = "Bearer"
@@ -58,37 +58,35 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization();
 
-var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+var corsPolicyName = "_myAllowSpecificOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddPolicy(name: corsPolicyName,
                       policy =>
                       {
-                          policy.WithOrigins("https://cotacao-frontend.vercel.app", "http://localhost:5173") 
-                                .WithMethods("GET", "POST", "OPTIONS") 
+                          policy.WithOrigins("https://cotacao-frontend.vercel.app", "http://localhost:5173")
+                                .WithMethods("GET", "POST", "OPTIONS")
                                 .AllowAnyHeader();
                       });
 });
-
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors(corsPolicyName);
 app.UseAuthentication();
 app.UseAuthorization();
 
-
 app.MapPost("/login", (UserLogin userLogin, IConfiguration config) =>
 {
-    if (userLogin.username == "admin" && userLogin.password == "12345")
+    if (userLogin.Username == "admin" && userLogin.Password == "12345")
     {
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(config["Jwt:Key"]));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
         var issuer = config["Jwt:Issuer"];
         var audience = config["Jwt:Audience"];
-        var claims = new[] { new Claim("username", userLogin.username) };
+        var claims = new[] { new Claim("username", userLogin.Username) };
         
         var token = new System.IdentityModel.Tokens.Jwt.JwtSecurityToken(
             issuer: issuer,
@@ -109,45 +107,42 @@ app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {
     
     TimeZoneInfo brazilTimeZone;
     try
-    {      
+    {
         brazilTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo");
     }
     catch (TimeZoneNotFoundException)
-    {        
+    {
         brazilTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
     }
+    DateTime brasiliaTime = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, brazilTimeZone);
+    var todayDate = brasiliaTime.ToString("MM-dd-yyyy");
+
+    var cacheKey = $"quote_{todayDate}";
     
-    DateTime horaDeBrasilia = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, brazilTimeZone);
-    var dataDeHoje = horaDeBrasilia.ToString("MM-dd-yyyy");
-   
-    var cacheKey = $"cotacao_{dataDeHoje}";
-    
-    if (cache.TryGetValue(cacheKey, out string cotacaoEmCache))
+    if (cache.TryGetValue(cacheKey, out string cachedQuote))
     {
-        return Results.Content(cotacaoEmCache, "application/json");
+        return Results.Content(cachedQuote, "application/json");
     }
 
-    var url = $"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='{dataDeHoje}'&$format=json";
-    var respostaDoBancoCentral = await client.GetStringAsync(url);
+    var url = $"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='{todayDate}'&$format=json";
+    var centralBankResponse = await client.GetStringAsync(url);
     
-    var opcoesDeCache = new MemoryCacheEntryOptions();
-    if (respostaDoBancoCentral.Contains("\"value\":[]")) 
+    var cacheOptions = new MemoryCacheEntryOptions();
+    if (centralBankResponse.Contains("\"value\":[]")) 
     {
-        opcoesDeCache.SetAbsoluteExpiration(TimeSpan.FromMinutes(5)); 
+        cacheOptions.SetAbsoluteExpiration(TimeSpan.FromMinutes(5));
     }
     else
     {
-        opcoesDeCache.SetAbsoluteExpiration(TimeSpan.FromHours(1));
+        cacheOptions.SetAbsoluteExpiration(TimeSpan.FromHours(1));
     }
 
-    cache.Set(cacheKey, respostaDoBancoCentral, opcoesDeCache);
+    cache.Set(cacheKey, centralBankResponse, cacheOptions);
     
-    return Results.Content(respostaDoBancoCentral, "application/json");
+    return Results.Content(centralBankResponse, "application/json");
 
 }).RequireAuthorization();
 
-
-
 app.Run();
 
-public record UserLogin(string username, string password);
+public record UserLogin(string Username, string Password);
