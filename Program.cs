@@ -64,9 +64,9 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
-                          policy.WithOrigins("https://cotacao-frontend.vercel.app", "http://localhost:5173")
-                                .AllowAnyHeader()
-                                .AllowAnyMethod();
+                          policy.WithOrigins("https://cotacao-frontend.vercel.app", "http://localhost:5173") 
+                                .WithMethods("GET", "POST", "OPTIONS") 
+                                .AllowAnyHeader();
                       });
 });
 
