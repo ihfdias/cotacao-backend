@@ -6,7 +6,6 @@ using Microsoft.Extensions.Caching.Memory;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// --- Adiciona Serviços ao Contêiner ---
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddHttpClient();
 builder.Services.AddMemoryCache();
@@ -71,17 +70,16 @@ builder.Services.AddCors(options =>
                       });
 });
 
-// --- Constrói a Aplicação ---
+
 var app = builder.Build();
 
-// --- Configura o Pipeline de Requisições ---
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseCors(MyAllowSpecificOrigins);
 app.UseAuthentication();
 app.UseAuthorization();
 
-// --- Mapeia os Endpoints ---
+
 app.MapPost("/login", (UserLogin userLogin, IConfiguration config) =>
 {
     if (userLogin.username == "admin" && userLogin.password == "12345")
@@ -109,19 +107,38 @@ app.MapPost("/login", (UserLogin userLogin, IConfiguration config) =>
 
 app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {
     
-    var cacheKey = $"cotacao_{DateTime.Now.ToString("yyyy-MM-dd")}";
+    TimeZoneInfo brazilTimeZone;
+    try
+    {      
+        brazilTimeZone = TimeZoneInfo.FindSystemTimeZoneById("America/Sao_Paulo");
+    }
+    catch (TimeZoneNotFoundException)
+    {        
+        brazilTimeZone = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+    }
+    
+    DateTime horaDeBrasilia = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, brazilTimeZone);
+    var dataDeHoje = horaDeBrasilia.ToString("MM-dd-yyyy");
+   
+    var cacheKey = $"cotacao_{dataDeHoje}";
     
     if (cache.TryGetValue(cacheKey, out string cotacaoEmCache))
     {
         return Results.Content(cotacaoEmCache, "application/json");
     }
 
-    var dataDeHoje = DateTime.Now.ToString("MM-dd-yyyy");
     var url = $"https://olinda.bcb.gov.br/olinda/servico/PTAX/versao/v1/odata/CotacaoDolarDia(dataCotacao=@dataCotacao)?@dataCotacao='{dataDeHoje}'&$format=json";
     var respostaDoBancoCentral = await client.GetStringAsync(url);
     
-    var opcoesDeCache = new MemoryCacheEntryOptions()
-        .SetAbsoluteExpiration(TimeSpan.FromHours(1));
+    var opcoesDeCache = new MemoryCacheEntryOptions();
+    if (respostaDoBancoCentral.Contains("\"value\":[]")) 
+    {
+        opcoesDeCache.SetAbsoluteExpiration(TimeSpan.FromMinutes(5)); 
+    }
+    else
+    {
+        opcoesDeCache.SetAbsoluteExpiration(TimeSpan.FromHours(1));
+    }
 
     cache.Set(cacheKey, respostaDoBancoCentral, opcoesDeCache);
     
@@ -129,8 +146,8 @@ app.MapGet("/", async (HttpClient client, IMemoryCache cache) => {
 
 }).RequireAuthorization();
 
-// --- Inicia a Aplicação ---
+
+
 app.Run();
 
-// --- Declaração de Tipos ---
 public record UserLogin(string username, string password);
