@@ -1,7 +1,9 @@
 # 🌐 API de Cotação de Moedas (.NET com JWT e Cache)
 
 API desenvolvida em **.NET 6** como parte de um desafio técnico para vaga de desenvolvedor júnior.  
-A principal função desta API é consultar os dados de **cotação do Dólar em tempo real**, disponibilizados pelo **Banco Central do Brasil**, e servi-los de forma **segura e otimizada**.
+A principal função desta API é consultar os dados de **cotação do Dólar em tempo real**, disponibilizados pelo **Banco Central do Brasil**, e servi-los de forma **segura e otimizada**.  
+
+O código segue as **melhores práticas da indústria**, incluindo a padronização de variáveis e funções em **inglês**.
 
 ---
 
@@ -43,27 +45,29 @@ A principal função desta API é consultar os dados de **cotação do Dólar em
 
 ### ✅ Pré-requisitos
 - **.NET 6 SDK** instalado  
-- Um editor de código como **VS Code** com a extensão **C# Dev Kit**
+- Editor de código como **VS Code** com a extensão **C# Dev Kit**
 
 ### ⚡ Instalação e Execução
 
-1. **Navegue até a pasta do projeto**  
-   Carregue a solução (`.sln`) no **VS Code**.
+1. **Clone o repositório**
+   ```bash
+   git clone https://github.com/ihfdias/cotacao-backend.git
+  ```
 
 2. **Configure os Segredos**
    ```bash
    dotnet user-secrets init
    dotnet user-secrets set "Jwt:Key" "SUA_CHAVE_SECRETA"
+   Substitua SUA_CHAVE_SECRETA por uma chave forte e aleatória.
+  ```
 
-Substitua SUA_CHAVE_SECRETA por uma chave forte e aleatória.
+3. **Execute a aplicação**
+  ```bash
+  dotnet run
+  
 
-Execute a aplicação
-
-dotnet run
-
-
-A API estará rodando no endereço informado no terminal (ex:
-👉 http://localhost:5053)
+4. **A API estará rodando no endereço informado no terminal** 
+(ex:👉 http://localhost:5053)
 
 📖 Documentação Swagger
 
